@@ -11,7 +11,10 @@
     "clean": "rimraf .next out",
     "lint": "next lint",
     "build-types": "tsc --noEmit --pretty",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "migrate": "npx tsc --project ./migrations/tsconfig.json && npx truffle migrate --reset",
+    "issue-tokens": "npx truffle exec scripts/issue-tokens.js",
+    "types:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json"
   },
   "dependencies": {
     "next": "^11.1.0",
@@ -25,6 +28,8 @@
     "@next/bundle-analyzer": "^11.1.0",
     "@typechain/truffle-v5": "^5.1.0",
     "@typechain/web3-v1": "^3.1.0",
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.4.14",
     "@types/react": "^17.0.17",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
