@@ -14,7 +14,7 @@
     "prepare": "husky install",
     "migrate": "npx tsc --project ./migrations/tsconfig.json && npx truffle migrate --reset",
     "types:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json",
-    "compile": "npx truffle compile",
+    "compile": "npx truffle compile --all",
     "ganache": "npx ganache-cli -i 5777"
   },
   "dependencies": {
