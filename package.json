@@ -13,7 +13,6 @@
     "build-types": "tsc --noEmit --pretty",
     "prepare": "husky install",
     "migrate": "npx tsc --project ./migrations/tsconfig.json && npx truffle migrate --reset",
-    "issue-tokens": "npx truffle exec scripts/issue-tokens.js",
     "types:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json"
   },
   "dependencies": {

@@ -6,7 +6,7 @@ module.exports = {
       network_id: 5777
     },
   },
-  contracts_directory: './src/contracts/',
+  contracts_directory: './contracts/',
   contracts_build_directory: './src/abis/',
   migrations_directory: "./migrations/dist",
   compilers: {
