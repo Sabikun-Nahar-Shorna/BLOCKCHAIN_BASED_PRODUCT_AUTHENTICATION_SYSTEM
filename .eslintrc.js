@@ -29,6 +29,7 @@ module.exports = {
         tsconfigRootDir: __dirname,
       },
       "rules": {
+        "no-console": "off",
         "one-var": "off",
         "prefer-destructuring": "off",
         "react/jsx-props-no-spreading": "off",

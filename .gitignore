@@ -35,3 +35,4 @@ local
 .vercel
 
 /src/abis
+/migrations/dist
