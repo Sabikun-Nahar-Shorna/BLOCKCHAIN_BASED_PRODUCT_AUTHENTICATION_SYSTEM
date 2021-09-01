@@ -11,6 +11,7 @@ export function useFirebaseRegister(){
   const { enqueueSnackbar } = useSnackbar();
   const {setCurrentUser} = useContext(AuthContext);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [registerInput, setRegisterInput] = useState<IRegisterInput>({
     email: "",
     password: ""
@@ -19,6 +20,7 @@ export function useFirebaseRegister(){
   const router = useRouter();
 
   async function register(){
+    setIsLoading(true);
     try {
       const { user } = await createUserWithEmailAndPassword(auth, registerInput.email, registerInput.password);
       enqueueSnackbar(`Successfully registered`, { variant: 'success' });
@@ -26,7 +28,8 @@ export function useFirebaseRegister(){
       setRegisterInput({
         email: "",
         password: ""
-      })
+      });
+      setIsLoading(false);
       router.push("/manager")
     } catch (err: any) {
       let errorMessage = 'Unknown error';
@@ -37,6 +40,7 @@ export function useFirebaseRegister(){
       } else if (err.code === 'auth/weak-password') {
         errorMessage = 'Password is weak.'
       }
+      setIsLoading(false);
       enqueueSnackbar(`An error occurred. ${errorMessage}`, { variant: 'error' });
     }
   }
@@ -44,6 +48,8 @@ export function useFirebaseRegister(){
   return {
     registerInput,
     setRegisterInput,
-    register
+    register,
+    isLoading,
+    setIsLoading
   }
 }

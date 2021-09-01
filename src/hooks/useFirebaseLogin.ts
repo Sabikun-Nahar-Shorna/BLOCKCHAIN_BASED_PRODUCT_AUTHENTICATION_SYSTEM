@@ -10,6 +10,7 @@ export function useFirebaseLogin(){
   const {auth} = useContext(FirebaseContext);
   const { enqueueSnackbar } = useSnackbar();
   const {setCurrentUser} = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [loginInput, setLoginInput] = useState<ILoginInput>({
     email: "",
@@ -19,6 +20,7 @@ export function useFirebaseLogin(){
   const router = useRouter();
 
   async function login(){
+    setIsLoading(true);
     try {
       const { user } = await signInWithEmailAndPassword(auth, loginInput.email, loginInput.password);
       enqueueSnackbar(`Successfully logged in`, { variant: 'success' });
@@ -28,6 +30,7 @@ export function useFirebaseLogin(){
         password: ""
       })
       router.push("/manager")
+      setIsLoading(false);
     } catch (err: any) {
       let errorMessage = 'Unknown error';
       if (err.code === 'auth/wrong-password') {
@@ -40,12 +43,15 @@ export function useFirebaseLogin(){
         errorMessage = 'User not found'
       }
       enqueueSnackbar(`An error occurred. ${errorMessage}`, { variant: 'error' });
+      setIsLoading(false);
     }
   }
 
   return {
     loginInput,
     setLoginInput,
-    login
+    login,
+    isLoading,
+    setIsLoading
   }
 }
