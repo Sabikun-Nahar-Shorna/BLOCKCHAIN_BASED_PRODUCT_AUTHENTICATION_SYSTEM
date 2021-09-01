@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  height: 100vh;
+}
+
+.page{
+  height: 100vh;
+}
+
 .loader,
 .loader:after {
   border-radius: 50%;

@@ -4,13 +4,15 @@ import { useFirebaseLogin } from "../hooks";
 export default function Login() {
   const {loginInput, setLoginInput, login} = useFirebaseLogin();
 
-  return <div className="Login w-full border-2 border-black flex items-center flex-col p-5">
-    <div className="flex w-full flex-col">
-      <TextInput value={loginInput.email} label="Email" placeHolder="Enter your email" onChange={(e)=> setLoginInput({... loginInput, email: e.target.value})} />
-      <TextInput value={loginInput.password} label="Password" placeHolder="Enter your password" onChange={(e)=> setLoginInput({... loginInput, password: e.target.value})} />
-    </div>
-    <div className="flex w-full justify-between">
-      <Button content="Register" onClick={login}/>
+  return <div className="Login page relative">
+    <div className="w-1/2 flex border-2 p-3 border-gray-900 rounded-md flex-col absolute" style={{top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+      <div className="flex flex-col">
+        <TextInput value={loginInput.email} label="Email" placeHolder="Enter your email" onChange={(e)=> setLoginInput({... loginInput, email: e.target.value})} />
+        <TextInput type="password" value={loginInput.password} label="Password" placeHolder="Enter your password" onChange={(e)=> setLoginInput({... loginInput, password: e.target.value})} />
+      </div>
+      <div className="flex justify-between">
+        <Button content="Login" onClick={login}/>
+      </div>
     </div>
   </div>
 }
