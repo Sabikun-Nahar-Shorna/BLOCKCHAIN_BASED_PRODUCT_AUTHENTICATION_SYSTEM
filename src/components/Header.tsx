@@ -28,7 +28,7 @@ export function Header(){
     </>
   }
 
-  return <div className="Header flex bg-gray-900 p-2 mb-5">
+  return <div className="Header flex bg-gray-900 p-2">
     {component}
   </div>
 }

@@ -9,8 +9,10 @@ const Index = () => {
   return (
     <div>
       <Header />
-      <Button content="User" onClick={()=> router.push("/user")}/>
-      <Button content="Manager" onClick={()=> router.push(currentUser ? "/manager" : "/login")}/>
+      <div className="p-2">
+        <Button content="User" onClick={()=> router.push("/user")}/>
+        <Button content="Manager" onClick={()=> router.push(currentUser ? "/manager" : "/login")}/>
+      </div>
     </div>
   );
 };
