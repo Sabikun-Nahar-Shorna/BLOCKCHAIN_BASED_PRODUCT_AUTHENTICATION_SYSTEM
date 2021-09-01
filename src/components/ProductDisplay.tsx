@@ -7,7 +7,7 @@ interface ProductDisplayProps{
 function ProductDisplayItem(props: {label: string, value: string}){
   const {label, value} = props;
   return <div className="flex my-1">
-    <div className="flex-1 bg-gray-900 mr-3 font-semibold p-3 rounded-sm text-center text-white">
+    <div className="flex-1 bg-gray-900 mr-1 font-semibold p-3 rounded-sm text-center text-white">
       {label}
     </div>
     <div className="flex-1 font-semibold p-3 text-center border-2 rounded-sm border-gray-700">
