@@ -3,19 +3,14 @@ import Web3 from "web3";
 import QrCode from "qrcode";
 import {v4} from "uuid";
 import ProductAuthJSON from "../abis/ProductAuth.json";
-import { Button, TextInput } from "../components";
-
-interface IProduct{
-  productType: string
-  productName: string
-  productId: string
-  productQrCode: string
-}
+import { Button, ProductDisplay, TextInput } from "../components";
+import { IProduct } from "../types";
 
 const Index = () => {
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
   const [fetchedProductId, setFetchedProductId] = useState<null | string>(null)
-  const [productInfo, setProductInfo] = useState<IProduct>({
+  const [fetchedProduct, setFetchedProduct] = useState<IProduct | null>(null);
+  const [productInfo, setProductInfo] = useState<IProduct & {productQrCode: string}>({
     productName: "",
     productType: "",
     productId: "",
@@ -67,10 +62,14 @@ const Index = () => {
   async function fetchProductById(){
     const {accounts, ProductAuthContract} = state;
     if(fetchedProductId){
-      const fetchProduct = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
+      const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
         from: accounts[0]
       }) as IProduct;
-      console.log(fetchProduct)
+      setFetchedProduct({
+        productId: fetchProductByIdData.productId,
+        productName: fetchProductByIdData.productName,
+        productType: fetchProductByIdData.productType,
+      })
     }
   }
 
@@ -90,8 +89,11 @@ const Index = () => {
 
       <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
       <Button onClick={fetchProductById} content="Fetch Product"/>
+      {fetchedProduct && <ProductDisplay product={fetchedProduct}/>}
     </div>
   );
 };
 
 export default Index;
+
+// 73ec2ae5-7a93-4155-aa77-1d1b3d5f6d8f
