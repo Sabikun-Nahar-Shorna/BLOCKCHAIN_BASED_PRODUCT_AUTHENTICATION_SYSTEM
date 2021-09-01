@@ -17,13 +17,14 @@ export default function User(){
         from: accounts[0]
       }) as IProduct;
       if(fetchProductByIdData.productId === ""){
-        setIsError(true)
+        setIsError(true);
       } else {
         setFetchedProduct({
           productId: fetchProductByIdData.productId,
           productName: fetchProductByIdData.productName,
           productType: fetchProductByIdData.productType,
         });
+        setIsError(false);
       }
       setIsLoading(false);
     }
