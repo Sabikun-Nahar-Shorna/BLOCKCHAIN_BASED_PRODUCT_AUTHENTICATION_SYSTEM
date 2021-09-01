@@ -72,7 +72,7 @@ const Index = () => {
       <Button disabled={transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {
         createProduct()
       }} content="Create Product"/>
-      {transactionState === "idle" && productId && productQrCode && <div className="flex flex-col items-center justify-center">
+      {transactionState === "ongoing" ? <div className="loader"/> : transactionState === "idle" && productId && productQrCode && <div className="flex flex-col items-center justify-center">
         <span className="font-bold">{productId}</span>
         <img style={{width: 250}} src={productQrCode} alt="Product Qr Code"/>
       </div>}
