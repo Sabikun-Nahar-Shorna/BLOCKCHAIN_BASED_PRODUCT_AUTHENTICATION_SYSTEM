@@ -29,6 +29,8 @@ module.exports = {
         tsconfigRootDir: __dirname,
       },
       "rules": {
+        "no-nested-ternary": "off",
+        "import/no-cycle": "off",
         "no-console": "off",
         "one-var": "off",
         "prefer-destructuring": "off",

@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react"
 import QrCode from "qrcode";
 import {v4} from "uuid";
-import { Button, TextInput } from "../components"
+import { Button, Header, TextInput } from "../components"
 import { IProduct } from "../types";
 import { RootContext } from "../contexts";
+import { useAuthenticated } from "../hooks";
 
 export default function Manager(){
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
@@ -15,6 +16,8 @@ export default function Manager(){
   });
 
   const {ProductAuthContract, accounts} = useContext(RootContext);
+  
+  useAuthenticated();
   
   async function createProduct(){
     if(ProductAuthContract){
@@ -36,6 +39,7 @@ export default function Manager(){
   const {productName, productType, productId, productQrCode} = productInfo;
 
   return <div>
+    <Header />
     <TextInput disabled={transactionState === "ongoing"} value={productName} onChange={e=> setProductInfo({...productInfo, productName: e.target.value})} label="Product Name" placeHolder="Set product name" />
     <TextInput disabled={transactionState === "ongoing"} value={productType} onChange={e=> setProductInfo({...productInfo, productType: e.target.value})} label="Product Type" placeHolder="Set product type" />
     <Button disabled={transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {

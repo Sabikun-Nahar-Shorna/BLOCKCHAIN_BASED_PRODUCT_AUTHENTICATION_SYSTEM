@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { TextInput, Button, ProductDisplay } from "../components";
+import { TextInput, Button, ProductDisplay, Header } from "../components";
 import { RootContext } from "../contexts";
 import { IProduct } from "../types";
 
@@ -22,6 +22,7 @@ export default function User(){
   }
 
   return <div>
+    <Header />
     <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
     <Button onClick={fetchProductById} content="Fetch Product"/>
     {fetchedProduct && <ProductDisplay product={fetchedProduct}/>}

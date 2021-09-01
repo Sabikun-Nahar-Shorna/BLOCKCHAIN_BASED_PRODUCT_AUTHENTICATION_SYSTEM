@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import {useRouter} from "next/router";
-import { Button } from "../components";
+import { Button, Header } from "../components";
 import { AuthContext } from "../contexts";
 
 const Index = () => {
@@ -8,10 +8,9 @@ const Index = () => {
   const router = useRouter();
   return (
     <div>
+      <Header />
       <Button content="User" onClick={()=> router.push("/user")}/>
-      <Button content="Manager" onClick={()=> router.push(currentUser ? "/manager" : "/register")}/>
-      <Button content="Login" onClick={()=> router.push("/login")}/>
-      <Button content="Register" onClick={()=> router.push("/register")}/>
+      <Button content="Manager" onClick={()=> router.push(currentUser ? "/manager" : "/login")}/>
     </div>
   );
 };
