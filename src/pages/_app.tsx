@@ -1,10 +1,10 @@
 import { AppProps } from 'next/app';
 import React, {useState, useEffect} from 'react';
 import Web3 from "web3";
+import { SnackbarProvider } from "notistack";
 import ProductAuthJSON from "../abis/ProductAuth.json";
 import { FirebaseContext, RootContext } from "../contexts";
 import { initFirebase } from '../utils/initFirebase';
-
 import '../styles/main.css';
 import { useFirebaseAutoAuth } from '../hooks';
 import { AuthContext } from '../contexts/AuthContext';
@@ -49,7 +49,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return <RootContext.Provider value={{ProductAuthContract, accounts, networkId}}>
     <AuthContext.Provider value={{currentUser, setCurrentUser}}>
       <FirebaseContext.Provider value={{app, auth}}>
+      <SnackbarProvider maxSnack={4}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
         <Component {...pageProps} />
+      </SnackbarProvider>
       </FirebaseContext.Provider>
     </AuthContext.Provider>
   </RootContext.Provider>
