@@ -3,3 +3,8 @@ export interface IProduct{
   productName: string
   productId: string
 }
+
+export interface ILoginInput {
+  email: string
+  password: string,
+}
