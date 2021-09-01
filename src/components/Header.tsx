@@ -12,11 +12,22 @@ export function Header(){
 
   let component: ReactNode = null;
 
-  if(pathname === "/login" || pathname === "/register" || pathname === "/user"){
+  if(pathname === "/register"){
+    component = <>
+      <Button variant="secondary" content="Home" onClick={()=> router.push("/")}/>
+      <Button variant="secondary" content="Login" onClick={()=> router.push("/login")}/>
+    </>
+  } else if(pathname === "/login"){
+    component = <>
+      <Button variant="secondary" content="Home" onClick={()=> router.push("/")}/>
+      <Button variant="secondary" content="Register" onClick={()=> router.push("/register")}/>
+    </>
+  } else if(pathname === "/user"){
     component = <>
       <Button variant="secondary" content="Home" onClick={()=> router.push("/")}/>
     </>
-  } else if(pathname === "/manager" || pathname === "/"){
+  }
+  else if(pathname === "/manager" || pathname === "/"){
     component = currentUser ? <>
       {pathname !== "/" && <Button variant="secondary" content="Home" onClick={()=> router.push("/")}/>}
       <Button variant="secondary" content="Logout" onClick={()=> {
