@@ -16,7 +16,6 @@ export default function User(){
       const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
         from: accounts[0]
       });
-      console.log(fetchProductByIdData)
       if(fetchProductByIdData[0] === ""){
         setIsError(true);
       } else {

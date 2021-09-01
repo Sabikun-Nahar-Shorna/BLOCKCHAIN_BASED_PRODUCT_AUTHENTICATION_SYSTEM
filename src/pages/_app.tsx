@@ -3,11 +3,10 @@ import React, {useState, useEffect} from 'react';
 import Web3 from "web3";
 import { SnackbarProvider } from "notistack";
 import ProductAuthJSON from "../abis/ProductAuth.json";
-import { FirebaseContext, RootContext } from "../contexts";
-import { initFirebase } from '../utils/initFirebase';
+import { AuthContext, FirebaseContext, RootContext } from "../contexts";
+import { initFirebase } from '../utils';
 import '../styles/main.css';
 import { useFirebaseAutoAuth } from '../hooks';
-import { AuthContext } from '../contexts/AuthContext';
 
 const { auth, app } = initFirebase();
 
