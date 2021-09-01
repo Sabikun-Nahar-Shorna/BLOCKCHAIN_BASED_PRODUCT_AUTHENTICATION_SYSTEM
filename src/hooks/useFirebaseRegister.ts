@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { useSnackbar } from "notistack";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, browserLocalPersistence, setPersistence } from "firebase/auth";
 import { FirebaseContext } from "../contexts";
 import { IRegisterInput } from "../types";
 import { AuthContext } from "../contexts/AuthContext";
@@ -22,6 +22,7 @@ export function useFirebaseRegister(){
   async function register(){
     setIsLoading(true);
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const { user } = await createUserWithEmailAndPassword(auth, registerInput.email, registerInput.password);
       enqueueSnackbar(`Successfully registered`, { variant: 'success' });
       setCurrentUser(user)

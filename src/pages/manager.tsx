@@ -5,7 +5,6 @@ import {PDFDownloadLink} from "@react-pdf/renderer";
 import { Button, Header, QrCodePdf, TextInput } from "../components"
 import { IProduct } from "../types";
 import { AuthContext, RootContext } from "../contexts";
-import { useAuthenticated } from "../hooks";
 
 export default function Manager(){
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
@@ -18,8 +17,6 @@ export default function Manager(){
 
   const {ProductAuthContract, accounts} = useContext(RootContext);
   const {currentUser} = useContext(AuthContext);
-  
-  useAuthenticated();
   
   async function createProduct(){
     if(ProductAuthContract){

@@ -8,8 +8,7 @@ export function useFirebaseAutoAuth(auth: Auth){
     auth.onAuthStateChanged((user) => {
       setCurrentUser(user)
     })
-    // eslint-disable-next-line
-  }, []);
+  }, [auth]);
 
   return {
     currentUser,

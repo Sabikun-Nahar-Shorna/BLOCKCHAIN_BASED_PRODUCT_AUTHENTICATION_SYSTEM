@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { useSnackbar } from "notistack";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseContext } from "../contexts";
 import { ILoginInput } from "../types";
 import { AuthContext } from "../contexts/AuthContext";
@@ -22,6 +22,7 @@ export function useFirebaseLogin(){
   async function login(){
     setIsLoading(true);
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const { user } = await signInWithEmailAndPassword(auth, loginInput.email, loginInput.password);
       enqueueSnackbar(`Successfully logged in`, { variant: 'success' });
       setCurrentUser(user)
