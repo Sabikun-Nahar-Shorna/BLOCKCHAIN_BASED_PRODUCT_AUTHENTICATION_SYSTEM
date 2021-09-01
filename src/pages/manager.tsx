@@ -15,20 +15,23 @@ export default function Manager(){
   });
 
   const {ProductAuthContract, accounts} = useContext(RootContext);
+  console.log({ProductAuthContract})
   
   async function createProduct(){
-    const {productName, productType} = productInfo;
-    const productId = v4();
-    setTransactionState("ongoing");
-    await ProductAuthContract.methods.addProduct(productName, productType, productId).send({from: accounts[0]});
-    const productQrCode = await QrCode.toDataURL(productId);
-    setProductInfo({
-      productName: "",
-      productType: "",
-      productId,
-      productQrCode
-    })
-    setTransactionState("idle");
+    if(ProductAuthContract){
+      const {productName, productType} = productInfo;
+      const productId = v4();
+      setTransactionState("ongoing");
+      await ProductAuthContract.methods.addProduct(productName, productType, productId).send({from: accounts[0]});
+      const productQrCode = await QrCode.toDataURL(productId);
+      setProductInfo({
+        productName: "",
+        productType: "",
+        productId,
+        productQrCode
+      })
+      setTransactionState("idle");
+    }
   }
 
   const {productName, productType, productId, productQrCode} = productInfo;
