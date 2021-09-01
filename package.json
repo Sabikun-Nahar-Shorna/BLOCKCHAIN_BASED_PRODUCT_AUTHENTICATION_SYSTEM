@@ -14,11 +14,13 @@
     "build-types": "tsc --noEmit --pretty",
     "prepare": "husky install",
     "migrate": "npx tsc --project ./migrations/tsconfig.json && npx truffle migrate --reset",
-    "types:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json",
+    "types:truffle:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json",
+    "types:web3:abis": "npx typechain --target=web3-v1 ./src/abis/*.json",
     "compile": "npx truffle compile --all",
-    "ganache": "npx ganache-cli -i 5777 --mnemonic \"trick chat junior expire cinnamon inflict level already arena square pipe asthma\""
+    "ganache": "npx ganache-cli -i 5777"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^2.0.19",
     "firebase": "^9.0.1",
     "next": "^11.1.0",
     "notistack": "^1.0.10",

@@ -11,18 +11,19 @@ export default function User(){
   const [isError, setIsError] = useState(false);
 
   async function fetchProductById(){
-    if(fetchedProductId){
+    if(fetchedProductId && ProductAuthContract){
       setIsLoading(true);
       const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
         from: accounts[0]
-      }) as IProduct;
-      if(fetchProductByIdData.productId === ""){
+      });
+      console.log(fetchProductByIdData)
+      if(fetchProductByIdData[0] === ""){
         setIsError(true);
       } else {
         setFetchedProduct({
-          productId: fetchProductByIdData.productId,
-          productName: fetchProductByIdData.productName,
-          productType: fetchProductByIdData.productType,
+          productId: fetchProductByIdData[2],
+          productName: fetchProductByIdData[0],
+          productType: fetchProductByIdData[1],
         });
         setIsError(false);
       }
