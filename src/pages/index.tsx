@@ -14,6 +14,7 @@ interface IProduct{
 
 const Index = () => {
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
+  const [fetchedProductId, setFetchedProductId] = useState<null | string>(null)
   const [productInfo, setProductInfo] = useState<IProduct>({
     productName: "",
     productType: "",
@@ -63,6 +64,16 @@ const Index = () => {
     setTransactionState("idle");
   }
 
+  async function fetchProductById(){
+    const {accounts, ProductAuthContract} = state;
+    if(fetchedProductId){
+      const fetchProduct = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
+        from: accounts[0]
+      }) as IProduct;
+      console.log(fetchProduct)
+    }
+  }
+
   const {productName, productType, productId, productQrCode} = productInfo;
   
   return (
@@ -76,6 +87,9 @@ const Index = () => {
         <span className="font-bold">{productId}</span>
         <img style={{width: 250}} src={productQrCode} alt="Product Qr Code"/>
       </div>}
+
+      <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
+      <Button onClick={fetchProductById} content="Fetch Product"/>
     </div>
   );
 };
