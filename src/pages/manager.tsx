@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import QrCode from "qrcode";
 import {v4} from "uuid";
 import { Button, TextInput } from "../components"
 import { IProduct } from "../types";
+import { RootContext } from "../contexts";
 
 export default function Manager(){
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
@@ -12,6 +13,8 @@ export default function Manager(){
     productId: "",
     productQrCode: ""
   });
+
+  const {ProductAuthContract, accounts} = useContext(RootContext);
   
   async function createProduct(){
     const {productName, productType} = productInfo;

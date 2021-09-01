@@ -3,12 +3,12 @@ import Web3 from "web3";
 
 import ProductAuthJSON from "../abis/ProductAuth.json";
 import { Button, ProductDisplay, TextInput } from "../components";
+import { RootContext } from "../contexts";
 import { IProduct } from "../types";
 
 const Index = () => {
   const [fetchedProductId, setFetchedProductId] = useState<null | string>(null)
   const [fetchedProduct, setFetchedProduct] = useState<IProduct | null>(null);
-  
 
   const [state, setState] = useState<{
     accounts: string[]
@@ -35,8 +35,6 @@ const Index = () => {
 
     loadWeb3()
   }, []);
-  
-  
 
   async function fetchProductById(){
     const {accounts, ProductAuthContract} = state;
@@ -52,13 +50,20 @@ const Index = () => {
     }
   }
 
+  const {
+    accounts,
+    networkId,
+    ProductAuthContract
+  } = state;
   
   return (
-    <div>
-      <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
-      <Button onClick={fetchProductById} content="Fetch Product"/>
-      {fetchedProduct && <ProductDisplay product={fetchedProduct}/>}
-    </div>
+    <RootContext.Provider value={{ProductAuthContract, accounts, networkId}}>
+      <div>
+        <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
+        <Button onClick={fetchProductById} content="Fetch Product"/>
+        {fetchedProduct && <ProductDisplay product={fetchedProduct}/>}
+      </div>
+    </RootContext.Provider>
   );
 };
 
