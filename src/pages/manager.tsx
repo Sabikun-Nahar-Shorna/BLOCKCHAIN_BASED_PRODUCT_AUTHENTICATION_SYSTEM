@@ -40,14 +40,18 @@ export default function Manager(){
 
   return <div>
     <Header />
-    <TextInput disabled={transactionState === "ongoing"} value={productName} onChange={e=> setProductInfo({...productInfo, productName: e.target.value})} label="Product Name" placeHolder="Set product name" />
-    <TextInput disabled={transactionState === "ongoing"} value={productType} onChange={e=> setProductInfo({...productInfo, productType: e.target.value})} label="Product Type" placeHolder="Set product type" />
-    <Button disabled={transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {
-      createProduct()
-    }} content="Create Product"/>
-    {transactionState === "ongoing" ? <div className="loader"/> : transactionState === "idle" && productId && productQrCode && <div className="flex flex-col items-center justify-center">
-      <span className="font-bold">{productId}</span>
-      <img style={{width: 250}} src={productQrCode} alt="Product Qr Code"/>
-    </div>}
+    <div className="p-2">
+      <div className="mb-5">
+        <TextInput disabled={transactionState === "ongoing"} value={productName} onChange={e=> setProductInfo({...productInfo, productName: e.target.value})} label="Name" placeHolder="Product name" />
+        <TextInput disabled={transactionState === "ongoing"} value={productType} onChange={e=> setProductInfo({...productInfo, productType: e.target.value})} label="Type" placeHolder="Product type" />
+      </div>
+      <Button disabled={transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {
+        createProduct()
+      }} content="Create Product"/>
+      {transactionState === "ongoing" ? <div className="loader"/> : transactionState === "idle" && productId && productQrCode && <div className="flex flex-col items-center justify-center">
+        <span className="font-bold">{productId}</span>
+        <img style={{width: 250}} src={productQrCode} alt="Product Qr Code"/>
+      </div>}
+    </div>
   </div>
 } 

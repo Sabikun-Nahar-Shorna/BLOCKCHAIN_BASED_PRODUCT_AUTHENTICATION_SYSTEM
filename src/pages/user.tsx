@@ -33,7 +33,7 @@ export default function User(){
   return <div>
     <Header />
     <div className="p-2">
-      <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Product Id" placeHolder="Fetched product id"/>
+      <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Id" placeHolder="Product id"/>
       <Button onClick={fetchProductById} content="Fetch Product" disabled={isLoading}/>
       {fetchedProduct && !isLoading && !isError && <ProductDisplay product={fetchedProduct}/>}
       {isError && <div className="font-bold text-xl text-red-500 text-center">No product with that id exists</div>}
