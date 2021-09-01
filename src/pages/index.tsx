@@ -1,19 +1,32 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import Web3 from "web3";
 import ProductAuthJSON from "../abis/ProductAuth.json";
+import { Button, TextInput } from "../components";
+
+interface IProduct{
+  productType: string
+  productName: string
+}
 
 const Index = () => {
+  const [productInfo, setProductInfo] = useState<IProduct>({
+    productName: "",
+    productType: ""
+  })
+
   const [state, setState] = useState<{
     accounts: string[]
     networkId: number | null,
     products: any[],
-    productAuth: any | null
+    ProductAuthContract: any | null
   }>({
     accounts: [],
     networkId: null,
     products: [],
-    productAuth: null
+    ProductAuthContract: null
   });
+
+  const {productName, productType} = productInfo;
 
   // if (daiTokenData && dappTokenData) {
   //   const daiToken = new web3.eth.Contract(DaiTokenJson.abi as any as AbiItem, daiTokenData.address);
@@ -35,14 +48,13 @@ const Index = () => {
       const web3 = new Web3("http://127.0.0.1:8545");
       const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const productAuth = new web3.eth.Contract(ProductAuthJSON.abi as any, "0x7c9e4dc61c13d3bc7bbfc0f67fa2a1cdf8d28978", {from: accounts[0]})
-      const fetchedProducts = await productAuth.methods.fetchProducts().call();
-      console.log({fetchedProducts})
+      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0xcf7044f1a04122bfdcfaaa530c238a8e45b21184", {from: accounts[0]})
+      const fetchedProducts = await ProductAuthContract.methods.fetchProducts().call();
       setState({
         accounts,
         networkId,
         products: fetchedProducts,
-        productAuth
+        ProductAuthContract
       })
     }
 
@@ -50,14 +62,19 @@ const Index = () => {
   }, []);
   
   async function createProduct(){
-    const {accounts, productAuth} = state;
-    const transaction = await productAuth.methods.addProduct("New Product", "Industry").send({from: accounts[0]});
-    console.log({transaction});
+    const {accounts, ProductAuthContract} = state;
+    await ProductAuthContract.methods.addProduct(productName, productType).send({from: accounts[0]});
   }
-
+  
   return (
     <div>
-      <button onClick={createProduct} type="button">Create Product</button>
+      <TextInput value={productName} onChange={e=> setProductInfo({...productInfo, productName: e.target.value})} label="Product Name" placeHolder="Set product name" />
+      <TextInput value={productType} onChange={e=> setProductInfo({...productInfo, productType: e.target.value})} label="Product Type" placeHolder="Set product type" />
+      <Button onClick={createProduct} content="Create Product"/>
+      {state.products.map(product=> <div key={`${product.productName}.${product.productType}`}>
+        {product.productName}
+        {product.productType}
+      </div>)}
     </div>
   );
 };
