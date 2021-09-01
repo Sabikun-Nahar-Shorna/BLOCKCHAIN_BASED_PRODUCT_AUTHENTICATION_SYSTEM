@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import {useRouter} from "next/router";
 import { Button } from "../components";
+import { AuthContext } from "../contexts";
 
 const Index = () => {
+  const {currentUser} = useContext(AuthContext);
   const router = useRouter();
   return (
     <div>
       <Button content="User" onClick={()=> router.push("/user")}/>
-      <Button content="Manager" onClick={()=> router.push("/manager")}/>
+      <Button content="Manager" onClick={()=> router.push(currentUser ? "/manager" : "/register")}/>
+      <Button content="Login" onClick={()=> router.push("/login")}/>
+      <Button content="Register" onClick={()=> router.push("/register")}/>
     </div>
   );
 };
