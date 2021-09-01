@@ -20,9 +20,11 @@
   "dependencies": {
     "next": "^11.1.0",
     "next-seo": "^4.26.0",
+    "qrcode": "^1.4.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-jsx-plugin-postcss": "^4.0.1",
+    "uuid": "^8.3.2",
     "web3": "^1.5.2"
   },
   "devDependencies": {
@@ -32,7 +34,9 @@
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.4.14",
+    "@types/qrcode": "^1.4.1",
     "@types/react": "^17.0.17",
+    "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "autoprefixer": "^10.3.1",
     "chai": "^4.3.4",
