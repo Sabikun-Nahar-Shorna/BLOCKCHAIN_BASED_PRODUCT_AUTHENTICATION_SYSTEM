@@ -5,8 +5,8 @@ import { AuthContext } from "../contexts";
 export function useAuthenticated(){
   const {currentUser} = useContext(AuthContext);
   useEffect(()=> {
-    if(currentUser){
-      router.push('/login')
+    if(!currentUser){
+      router.push('/login');
     }
   })
 }
