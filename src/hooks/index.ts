@@ -1,1 +1,1 @@
-export * from "./firebaseAuth";
+export * from "./useFirebaseAutoAuth";

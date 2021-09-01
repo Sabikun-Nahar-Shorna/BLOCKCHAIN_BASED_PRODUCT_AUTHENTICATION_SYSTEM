@@ -2,9 +2,14 @@ import { AppProps } from 'next/app';
 import React, {useState, useEffect} from 'react';
 import Web3 from "web3";
 import ProductAuthJSON from "../abis/ProductAuth.json";
-import { RootContext } from "../contexts";
+import { FirebaseContext, RootContext } from "../contexts";
+import { initFirebase } from '../utils/initFirebase';
 
 import '../styles/main.css';
+import { useFirebaseAutoAuth } from '../hooks';
+import { AuthContext } from '../contexts/AuthContext';
+
+const { auth, app } = initFirebase();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [state, setState] = useState<{
@@ -16,6 +21,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     networkId: null,
     ProductAuthContract: null
   });
+
+  const {currentUser, setCurrentUser} = useFirebaseAutoAuth(auth);
 
   useEffect(()=> {
     async function loadWeb3(){
@@ -40,7 +47,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   } = state;
 
   return <RootContext.Provider value={{ProductAuthContract, accounts, networkId}}>
-    <Component {...pageProps} />
+    <AuthContext.Provider value={{currentUser, setCurrentUser}}>
+      <FirebaseContext.Provider value={{app, auth}}>
+        <Component {...pageProps} />
+      </FirebaseContext.Provider>
+    </AuthContext.Provider>
   </RootContext.Provider>
      
 }
