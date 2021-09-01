@@ -1,11 +1,13 @@
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   },
   section: {
     margin: 10,
@@ -14,14 +16,21 @@ const styles = StyleSheet.create({
   }
 });
 
-export function QrCodePdf(){
+interface QrCodePdfProps {
+  productQrCode: string
+  productId: string
+}
+
+export function QrCodePdf(props: QrCodePdfProps){
+  const {productId, productQrCode} = props;
   return <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
-        <Text>Section #1</Text>
+        {/* eslint-disable-next-line */}
+        <Image source={productQrCode}/>
       </View>
       <View style={styles.section}>
-        <Text>Section #2</Text>
+        <Text>{productId}</Text>
       </View>
     </Page>
   </Document>

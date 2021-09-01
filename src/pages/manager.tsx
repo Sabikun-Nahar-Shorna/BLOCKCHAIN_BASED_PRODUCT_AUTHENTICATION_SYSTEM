@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react"
 import QrCode from "qrcode";
 import {v4} from "uuid";
-import ReactPDF from "@react-pdf/renderer";
+import {PDFDownloadLink} from "@react-pdf/renderer";
 import { Button, Header, QrCodePdf, TextInput } from "../components"
 import { IProduct } from "../types";
-import { RootContext } from "../contexts";
+import { AuthContext, RootContext } from "../contexts";
 import { useAuthenticated } from "../hooks";
-import { download } from "../utils";
 
 export default function Manager(){
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
@@ -18,6 +17,7 @@ export default function Manager(){
   });
 
   const {ProductAuthContract, accounts} = useContext(RootContext);
+  const {currentUser} = useContext(AuthContext);
   
   useAuthenticated();
   
@@ -48,17 +48,18 @@ export default function Manager(){
         <TextInput disabled={transactionState === "ongoing"} value={productType} onChange={e=> setProductInfo({...productInfo, productType: e.target.value})} label="Type" placeHolder="Product type" />
       </div>
       <div className="flex justify-between">
-        <Button disabled={transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {
+        <Button disabled={!currentUser || transactionState === "ongoing" || !productName || !productType} onClick={async ()=> {
           createProduct()
         }} content="Create Product"/>
       </div>
       {transactionState === "ongoing" ? <div className="loader"/> : transactionState === "idle" && productId && productQrCode && <div className="flex flex-col items-center justify-center">
         <span className="font-bold">{productId}</span>
         <img style={{width: 250}} src={productQrCode} alt="Product Qr Code"/>
-        <Button onClick={async ()=> {
-          const pdfString = await ReactPDF.pdf(<QrCodePdf />).toString();
-          download(`${productId}.pdf`, pdfString)
-        }} content="Generate PDF"/>
+        <PDFDownloadLink fileName={`${productId}.pdf`} document={<QrCodePdf productId={productId} productQrCode={productQrCode}/>}>
+          {({loading}) =>
+            <Button disabled={loading} content="Generate PDF"/>
+          }
+        </PDFDownloadLink>
       </div>}
     </div>
   </div>
