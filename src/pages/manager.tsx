@@ -15,7 +15,6 @@ export default function Manager(){
   });
 
   const {ProductAuthContract, accounts} = useContext(RootContext);
-  console.log({ProductAuthContract})
   
   async function createProduct(){
     if(ProductAuthContract){
