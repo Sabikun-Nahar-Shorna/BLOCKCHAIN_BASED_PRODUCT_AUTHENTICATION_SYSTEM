@@ -53,7 +53,7 @@ export default function User(){
           onError={(err: any)=> console.error(err)}
           onScan={(_scannedQrCode: string)=> {
             setScannedQrCode(_scannedQrCode);
-            setFetchedProductId(_scannedQrCode)
+            setCameraOn(false);
           }}
         />
       }
