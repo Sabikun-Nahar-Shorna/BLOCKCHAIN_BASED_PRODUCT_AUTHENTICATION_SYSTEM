@@ -14,10 +14,10 @@ export default function User(){
   const [cameraOn, setCameraOn] = useState(false);
   const [scannedQrCode, setScannedQrCode] = useState('');
 
-  async function fetchProductById(){
-    if(fetchedProductId && ProductAuthContract){
+  async function fetchProductById(_fetchedProductId: string){
+    if(_fetchedProductId && ProductAuthContract){
       setIsLoading(true);
-      const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(fetchedProductId).call({
+      const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(_fetchedProductId).call({
         from: accounts[0]
       });
       if(fetchProductByIdData[0] === ""){
@@ -38,7 +38,7 @@ export default function User(){
     <Header />
     <div className="p-2">
       <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Id" placeHolder="Product id"/>
-      <Button onClick={fetchProductById} content="Fetch Product" disabled={isLoading}/>
+      <Button onClick={()=> fetchProductById(fetchedProductId!)} content="Fetch Product" disabled={isLoading}/>
       <Button onClick={()=> setCameraOn(_cameraOn=>!_cameraOn)} content="Scan QR Code"/>
       {fetchedProduct && !isLoading && !isError && <ProductDisplay product={fetchedProduct}/>}
       {isError && <div className="font-bold text-xl text-red-500 text-center">No product with that id exists</div>}
@@ -49,11 +49,14 @@ export default function User(){
             height: 240,
             width: 320,
           }}
-          legacyMode
+          facingMode="rear"
           onError={(err: any)=> console.error(err)}
           onScan={(_scannedQrCode: string)=> {
-            setScannedQrCode(_scannedQrCode);
-            setCameraOn(false);
+            if(_scannedQrCode !== null) {
+              setScannedQrCode(_scannedQrCode);
+              setCameraOn(false);
+              fetchProductById(_scannedQrCode);
+            }
           }}
         />
       }
