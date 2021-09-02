@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+// @ts-ignore
+import QrReader from 'react-qr-scanner'
 import { TextInput, Button, ProductDisplay, Header } from "../components";
 import { RootContext } from "../contexts";
 import { IProduct } from "../types";
@@ -9,6 +11,7 @@ export default function User(){
   const {ProductAuthContract, accounts} = useContext(RootContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [cameraOn, setCameraOn] = useState(false);
 
   async function fetchProductById(){
     if(fetchedProductId && ProductAuthContract){
@@ -35,8 +38,22 @@ export default function User(){
     <div className="p-2">
       <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Id" placeHolder="Product id"/>
       <Button onClick={fetchProductById} content="Fetch Product" disabled={isLoading}/>
+      <Button onClick={()=> setCameraOn(_cameraOn=>!_cameraOn)} content="Scan QR Code"/>
       {fetchedProduct && !isLoading && !isError && <ProductDisplay product={fetchedProduct}/>}
       {isError && <div className="font-bold text-xl text-red-500 text-center">No product with that id exists</div>}
+      {
+        cameraOn && <QrReader
+          delay={100}
+          style={{
+            height: 240,
+            width: 320,
+          }}
+          onError={(err: any)=> console.error(err)}
+          onScan={(_scannedQrCode: string)=> {
+            setFetchedProductId(_scannedQrCode)
+          }}
+        />
+      }
     </div>
   </div>
 }
