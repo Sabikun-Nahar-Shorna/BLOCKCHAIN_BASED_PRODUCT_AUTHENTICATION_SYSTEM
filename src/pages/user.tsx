@@ -48,12 +48,18 @@ export default function User(){
             height: 240,
             width: 320,
           }}
-          facingMode="front"
+          facingMode="rear"
           onError={(err: any)=> console.error(err)}
-          onScan={(_scannedQrCode: {text: string})=> {
+          onScan={(_scannedQrCode: string | {text: string})=> {
             if(_scannedQrCode !== null) {
+              let qrCode = '';
+              if(typeof _scannedQrCode === "string"){
+                qrCode = _scannedQrCode
+              } else if(typeof _scannedQrCode === "object"){
+                qrCode = _scannedQrCode.text
+              }
               setCameraOn(false);
-              fetchProductById(_scannedQrCode.text);
+              fetchProductById(qrCode);
             }
           }}
         />

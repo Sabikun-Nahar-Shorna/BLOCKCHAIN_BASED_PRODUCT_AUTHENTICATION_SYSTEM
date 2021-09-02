@@ -28,7 +28,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       const web3 = new Web3("http://127.0.0.1:8545");
       const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0x343C1BE0EbbC2e059CA8d0a54A1D7204d857041D", {from: accounts[0], gas: 300000})
+      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0xBA3cCf2eDC797aD42fA2Fa4659c5CC85Bd9A7724", {from: accounts[0], gas: 300000})
       setState({
         accounts,
         networkId,
