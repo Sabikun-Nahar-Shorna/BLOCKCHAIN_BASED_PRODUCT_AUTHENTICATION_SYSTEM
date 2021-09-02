@@ -12,7 +12,6 @@ export default function User(){
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
-  const [scannedQrCode, setScannedQrCode] = useState('');
 
   async function fetchProductById(_fetchedProductId: string){
     if(_fetchedProductId && ProductAuthContract){
@@ -49,19 +48,15 @@ export default function User(){
             height: 240,
             width: 320,
           }}
-          facingMode="rear"
+          facingMode="front"
           onError={(err: any)=> console.error(err)}
-          onScan={(_scannedQrCode: string)=> {
+          onScan={(_scannedQrCode: {text: string})=> {
             if(_scannedQrCode !== null) {
-              setScannedQrCode(_scannedQrCode);
               setCameraOn(false);
-              fetchProductById(_scannedQrCode);
+              fetchProductById(_scannedQrCode.text);
             }
           }}
         />
-      }
-      Scanned QR Code {
-        JSON.stringify(scannedQrCode)
       }
     </div>
   </div>
