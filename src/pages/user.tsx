@@ -13,6 +13,7 @@ export default function User(){
   const [cameraOn, setCameraOn] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationFrameRef = useRef<number>(0);
 
   const fetchProductByIdCallback = useCallback(async (_fetchedProductId: string) => {
     if(_fetchedProductId && ProductAuthContract){
@@ -34,9 +35,20 @@ export default function User(){
     }
   }, [ProductAuthContract, accounts]);
 
+  const cleanUpCallback = useCallback(() => {
+    cancelAnimationFrame(animationFrameRef.current)
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
+      stream.getTracks().forEach((track) => {
+        if (track.readyState === 'live' && track.kind === 'video') {
+          track.stop();
+        }
+      });
+    })
+  }, [])
+
   function tick(_cameraOn: boolean) {
     const canvas = canvasRef.current!.getContext("2d");
-    if (_cameraOn && canvas && canvasRef.current && videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
+    if (canvas && canvasRef.current && videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
       canvasRef.current.height = videoRef.current.videoHeight;
       canvasRef.current.width = videoRef.current.videoWidth;
       canvas.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -47,8 +59,11 @@ export default function User(){
       if (code) {
         setCameraOn(false);
         fetchProductByIdCallback(code.data);
+        cleanUpCallback();
       }
-      requestAnimationFrame(()=> {
+    }
+    if(_cameraOn){
+      animationFrameRef.current = requestAnimationFrame(()=> {
         tick(_cameraOn)
       });
     }
@@ -60,28 +75,18 @@ export default function User(){
         if(cameraOn) {
           videoRef.current!.srcObject = stream;
           videoRef.current!.play();
-          requestAnimationFrame(()=> {
+          animationFrameRef.current = requestAnimationFrame(()=> {
             tick(cameraOn)
           });
         } else {
-          stream.getTracks().forEach((track) => {
-            if (track.readyState === 'live' && track.kind === 'video') {
-              track.stop();
-            }
-          });
+          cleanUpCallback();
           videoRef.current!.srcObject = null;
         }
       });
     }
 
     return () => {
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
-        stream.getTracks().forEach((track) => {
-          if (track.readyState === 'live' && track.kind === 'video') {
-            track.stop();
-          }
-        });
-      })
+      cleanUpCallback();
     }
   }, [cameraOn]);
 
