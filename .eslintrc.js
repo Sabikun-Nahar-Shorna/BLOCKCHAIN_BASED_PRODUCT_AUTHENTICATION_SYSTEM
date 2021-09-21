@@ -44,6 +44,7 @@ module.exports = {
         "import/prefer-default-export": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/media-has-caption": "off",
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
           "error",

@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
-// @ts-ignore
-import QrReader from 'react-qr-scanner'
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import jsQR from "jsqr";
 import { TextInput, Button, ProductDisplay, Header } from "../components";
 import { RootContext } from "../contexts";
 import { IProduct } from "../types";
@@ -12,8 +11,10 @@ export default function User(){
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  async function fetchProductById(_fetchedProductId: string){
+  const fetchProductByIdCallback = useCallback(async (_fetchedProductId: string) => {
     if(_fetchedProductId && ProductAuthContract){
       setIsLoading(true);
       const fetchProductByIdData = await ProductAuthContract.methods.fetchProductById(_fetchedProductId).call({
@@ -31,39 +32,69 @@ export default function User(){
       }
       setIsLoading(false);
     }
+  }, [ProductAuthContract, accounts]);
+
+  function tick(_cameraOn: boolean) {
+    const canvas = canvasRef.current!.getContext("2d");
+    if (_cameraOn && canvas && canvasRef.current && videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
+      canvasRef.current.height = videoRef.current.videoHeight;
+      canvasRef.current.width = videoRef.current.videoWidth;
+      canvas.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      const imageData = canvas.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: "dontInvert",
+      });
+      if (code) {
+        setCameraOn(false);
+        fetchProductByIdCallback(code.data);
+      }
+      requestAnimationFrame(()=> {
+        tick(_cameraOn)
+      });
+    }
   }
+
+  useEffect(() => {
+    if(videoRef.current) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
+        if(cameraOn) {
+          videoRef.current!.srcObject = stream;
+          videoRef.current!.play();
+          requestAnimationFrame(()=> {
+            tick(cameraOn)
+          });
+        } else {
+          stream.getTracks().forEach((track) => {
+            if (track.readyState === 'live' && track.kind === 'video') {
+              track.stop();
+            }
+          });
+          videoRef.current!.srcObject = null;
+        }
+      });
+    }
+
+    return () => {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
+        stream.getTracks().forEach((track) => {
+          if (track.readyState === 'live' && track.kind === 'video') {
+            track.stop();
+          }
+        });
+      })
+    }
+  }, [cameraOn]);
 
   return <div>
     <Header />
     <div className="p-2">
       <TextInput value={fetchedProductId ?? ''} onChange={(e)=> setFetchedProductId(e.target.value)} label="Id" placeHolder="Product id"/>
-      <Button onClick={()=> fetchProductById(fetchedProductId!)} content="Fetch Product" disabled={isLoading}/>
+      <Button onClick={()=> fetchProductByIdCallback(fetchedProductId!)} content="Fetch Product" disabled={isLoading}/>
       <Button onClick={()=> setCameraOn(_cameraOn=>!_cameraOn)} content="Scan QR Code"/>
       {fetchedProduct && !isLoading && !isError && <ProductDisplay product={fetchedProduct}/>}
       {isError && <div className="font-bold text-xl text-red-500 text-center">No product with that id exists</div>}
-      {
-        cameraOn && <QrReader
-          delay={100}
-          style={{
-            height: 240,
-            width: 320,
-          }}
-          facingMode="rear"
-          onError={(err: any)=> console.error(err)}
-          onScan={(_scannedQrCode: string | {text: string})=> {
-            if(_scannedQrCode !== null) {
-              let qrCode = '';
-              if(typeof _scannedQrCode === "string"){
-                qrCode = _scannedQrCode
-              } else if(typeof _scannedQrCode === "object"){
-                qrCode = _scannedQrCode.text
-              }
-              setCameraOn(false);
-              fetchProductById(qrCode);
-            }
-          }}
-        />
-      }
+      <canvas ref={canvasRef} style={{display: 'none'}}/>
+      <video ref={videoRef}/>
     </div>
   </div>
 }
