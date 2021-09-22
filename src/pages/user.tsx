@@ -36,6 +36,8 @@ export default function User(){
   }, [ProductAuthContract, accounts]);
 
   const cleanUpCallback = useCallback(() => {
+    if(videoRef.current)
+      videoRef.current!.srcObject = null;
     cancelAnimationFrame(animationFrameRef.current)
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
       stream.getTracks().forEach((track) => {
@@ -57,9 +59,9 @@ export default function User(){
         inversionAttempts: "dontInvert",
       });
       if (code) {
+        cleanUpCallback();
         setCameraOn(false);
         fetchProductByIdCallback(code.data);
-        cleanUpCallback();
       }
     }
     if(_cameraOn){
@@ -80,7 +82,6 @@ export default function User(){
           });
         } else {
           cleanUpCallback();
-          videoRef.current!.srcObject = null;
         }
       });
     }
