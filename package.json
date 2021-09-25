@@ -17,7 +17,7 @@
     "types:truffle:abis": "npx typechain --target=truffle-v5 ./src/abis/*.json",
     "types:web3:abis": "npx typechain --target=web3-v1 ./src/abis/*.json",
     "compile": "npx truffle compile --all",
-    "ganache": "npx ganache-cli -i 5777"
+    "ganache": "npx ganache-cli -i 5777 --blockTime 150"
   },
   "dependencies": {
     "@react-pdf/renderer": "^2.0.19",

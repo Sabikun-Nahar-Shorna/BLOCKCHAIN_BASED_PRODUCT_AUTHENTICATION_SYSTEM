@@ -27,6 +27,7 @@ contract ProductAuth {
 
   // function to add the product to the state variables 
   function addProduct(string memory productName, string memory productType, string memory productId) public {
+    require(msg.sender == owner, "Only the manager can add product");
     // Create a product of type Product using the passed parameters
     Product memory product = Product({
       productName: productName,
