@@ -8,6 +8,7 @@ import { AuthContext, RootContext } from "../contexts";
 
 export default function Manager(){
   const [transactionState, setTransactionState] = useState<"ongoing" | "idle">("idle");
+  // State to store the product related data, this will be filled and displayed when the manager creates a product
   const [productInfo, setProductInfo] = useState<IProduct & {productQrCode: string}>({
     productName: "",
     productType: "",
@@ -19,11 +20,16 @@ export default function Manager(){
   const {currentUser} = useContext(AuthContext);
   
   async function createProduct(){
+    // At first check if the smart contract exists (has been fetched properly)
     if(ProductAuthContract){
       const {productName, productType} = productInfo;
       const productId = v4();
       setTransactionState("ongoing");
+      // Calling the addProduct method on ProductAuth.sol file passing the required arguments
+      // Product name, type from the state and generate id.
+      // send option is required to set which address is doing this transaction, it must be the manager's address or accounts[0]
       await ProductAuthContract.methods.addProduct(productName, productType, productId).send({from: accounts[0]});
+      // Generate the QrCode which stores only the product id
       const productQrCode = await QrCode.toDataURL(productId);
       setProductInfo({
         productName: "",

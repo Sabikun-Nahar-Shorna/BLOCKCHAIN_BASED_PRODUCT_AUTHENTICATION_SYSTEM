@@ -5,7 +5,7 @@
 1. Clone the repo
 2. Write `npm install` to install all the dependencies
 3. Run `npm run ganache` to start up the local blockchain network in the terminal
-4. Run `npm run migrate` to migrate the ProductAuth smart contract in the locally running blockchain
+4. Run `npm run migrate` to migrate the `ProductAuth` smart contract in the locally running blockchain
 5. After the smart contract have been deployed, check the terminal for the output, and copy the contract address which is `0xBA3cCf2eDC797aD42fA2Fa4659c5CC85Bd9A7724` in the example.
 
 ```txt

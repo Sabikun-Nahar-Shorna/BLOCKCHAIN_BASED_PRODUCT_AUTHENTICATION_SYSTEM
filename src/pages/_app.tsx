@@ -11,6 +11,7 @@ import { useFirebaseAutoAuth } from '../hooks';
 const { auth, app } = initFirebase();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  // Creating a state to stored smart contract related data
   const [state, setState] = useState<{
     accounts: string[]
     networkId: number | null,
@@ -25,10 +26,17 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   useEffect(()=> {
     async function loadWeb3(){
+      // Creates a new Web3 object, url points to our local blockchain
       const web3 = new Web3("http://127.0.0.1:8545");
+      // Get all the accounts from our local blockchain, which will be 10 by default
       const accounts = await web3.eth.getAccounts();
+      // Get the network id our blockchain is running on
       const networkId = await web3.eth.net.getId();
-      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0xE0bB76f19a030b677ddE25BA62Dfb08d3a91623A", {from: accounts[0], gas: 300000})
+      // Load the SmartContract using the generated abi, smart contract address
+      // 3rd argument specifies which account/address is loading the smart contract, 
+      // and gas is required to set the limit of gas the address is willing to spend in this transaction (loading smart contract)
+      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0x842C96D077577688B3e8C2578C1DEc9d73872251", {from: accounts[0], gas: 300000});
+      // Store all the obtained data in the state
       setState({
         accounts,
         networkId,
@@ -59,7 +67,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </FirebaseContext.Provider>
     </AuthContext.Provider>
   </RootContext.Provider>
-     
 }
 
 export default MyApp;
