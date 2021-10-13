@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       // Load the SmartContract using the generated abi, smart contract address
       // 3rd argument specifies which account/address is loading the smart contract, 
       // and gas is required to set the limit of gas the address is willing to spend in this transaction (loading smart contract)
-      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0xB822873aB6400FfC41D6ac71FbcC2814aba0CcE5", {from: accounts[0], gas: 300000});
+      const ProductAuthContract = new web3.eth.Contract(ProductAuthJSON.abi as any, "0xB822873aB6400FfC41D6ac71FbcC2814aba0CcE5", {from: accounts[0], gas: 750000});
       // Store all the obtained data in the state
       setState({
         accounts,
