@@ -1,6 +1,7 @@
-# Blockchain app
+<h2 align="center">BlockChain Based Product Authentication System</h2>
 
-## Frontend setup
+<h2 align="center">Frontend Setup</h2>
+
 
 1. Clone the repo
 2. Write `npm install` to install all the dependencies
